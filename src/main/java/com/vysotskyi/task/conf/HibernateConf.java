@@ -1,8 +1,10 @@
 package com.vysotskyi.task.conf;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -17,7 +19,7 @@ public class HibernateConf {
 
     @Bean("entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        final LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("com.vysotskyi.task.model");
         sessionFactory.setHibernateProperties(hibernateProperties());
@@ -27,7 +29,7 @@ public class HibernateConf {
 
     @Bean
     public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         dataSource.setUsername("postgres");
@@ -38,17 +40,14 @@ public class HibernateConf {
 
     @Bean("transactionManager")
     public PlatformTransactionManager hibernateTransactionManager() {
-        HibernateTransactionManager transactionManager
-                = new HibernateTransactionManager();
+        final HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
     }
 
-    private final Properties hibernateProperties() {
+    private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-               hibernateProperties.setProperty(
-                "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-
+        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return hibernateProperties;
     }
 }
