@@ -15,9 +15,8 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public void getForecast() {
-        final Forecast forecast = restTemplate.getForObject(Data.weather_query, Forecast.class);
-        System.out.println();
+    public Forecast getForecast() {
+        return restTemplate.getForObject(Data.weather_query, Forecast.class);
     }
 
 }

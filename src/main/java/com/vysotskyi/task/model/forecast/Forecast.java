@@ -20,6 +20,18 @@ public class Forecast {
         this.time = date;
     }
 
+    public Date getTime() {
+        return time;
+    }
+
+    public Weather getMain() {
+        return main;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
     public void setMain(Weather main) {
         this.main = main;
     }
