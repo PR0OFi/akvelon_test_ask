@@ -1,8 +1,12 @@
 package com.vysotskyi.task.service;
 
+import com.vysotskyi.task.model.City;
+
+import java.util.List;
+
 public interface CityService {
-    void createCity();
+    void createCity(City city);
     void deleteCity();
     void updateWeather();
-    void readCity();
+    List<City> readCity();
 }

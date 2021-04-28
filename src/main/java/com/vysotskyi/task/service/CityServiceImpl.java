@@ -1,7 +1,11 @@
 package com.vysotskyi.task.service;
 
+import com.vysotskyi.task.model.City;
 import com.vysotskyi.task.repository.CityRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -13,8 +17,8 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void createCity() {
-
+    public void createCity(@RequestBody City city) {
+        repository.save(city);
     }
 
     @Override
@@ -28,7 +32,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void readCity() {
-
+    public List<City> readCity() {
+        return repository.findAll();
     }
 }

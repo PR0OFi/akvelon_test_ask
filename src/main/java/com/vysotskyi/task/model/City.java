@@ -2,6 +2,9 @@ package com.vysotskyi.task.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,6 +14,7 @@ public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "city_id")
+    @NotNull
     private Integer cityId;
 
     @Column(name = "city_name")
@@ -22,6 +26,15 @@ public class City {
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
+    public City() {
+    }
+
+    public City(@JsonProperty("id") Integer cityId, @JsonProperty("city_name") String nameCity,@JsonProperty("city_temperature") Double temperatureCity,@JsonProperty("update_time") LocalDateTime updateTime) {
+        this.cityId = cityId;
+        this.nameCity = nameCity;
+        this.temperatureCity = temperatureCity;
+        this.updateTime = updateTime;
+    }
 
     public void setCityId(Integer cityId) {
         this.cityId = cityId;

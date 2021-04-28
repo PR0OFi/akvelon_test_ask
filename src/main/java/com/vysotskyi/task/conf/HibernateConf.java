@@ -46,7 +46,7 @@ public class HibernateConf {
     }
 
     private Properties hibernateProperties() {
-        Properties hibernateProperties = new Properties();
+        final Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return hibernateProperties;
     }
