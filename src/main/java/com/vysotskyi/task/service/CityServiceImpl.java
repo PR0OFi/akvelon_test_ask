@@ -3,6 +3,8 @@ package com.vysotskyi.task.service;
 import com.vysotskyi.task.model.City;
 import com.vysotskyi.task.model.forecast.Forecast;
 import com.vysotskyi.task.repository.CityRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ public class CityServiceImpl implements CityService {
 
     private final CityRepository repository;
     private final WeatherService weatherService;
+    private final Logger logger = LoggerFactory.getLogger(CityServiceImpl.class);
 
     public CityServiceImpl(CityRepository repository, WeatherService weatherService) {
         this.repository = repository;
@@ -26,11 +29,15 @@ public class CityServiceImpl implements CityService {
         final Forecast forecast = weatherService.getForecast(city.getName());
         city.setTemperature(forecast.getMain().getTemperature());
         city.setUpdateTime(forecast.getTime());
+        logger.info("Creating entity with params name={}, t={}, time={}", city.getName(), city.getTemperature(), city.getUpdateTime());
         repository.save(city);
     }
 
+    @Transactional
     @Override
     public void deleteCityById(int id) {
+        final City city = repository.getOne(id);
+        logger.info("Delete city {}", city.getName());
         repository.deleteById(id);
     }
 
@@ -41,11 +48,13 @@ public class CityServiceImpl implements CityService {
         final Forecast forecast = weatherService.getForecast(city.getName());
         city.setTemperature(forecast.getMain().getTemperature());
         city.setUpdateTime(forecast.getTime());
+        logger.info("Update forecast for city={}", city.getName());
         repository.save(city);
     }
 
     @Override
     public List<City> readCity() {
+        logger.info("Getting all cities from DB");
         return repository.findAll();
     }
 
@@ -53,11 +62,13 @@ public class CityServiceImpl implements CityService {
     @Scheduled(fixedDelayString = "${delay.update.rate}")
     @Override
     public void autoUpdateWeather() {
+        logger.info("Starting update forecast for all cities");
         final List<City> all = repository.findAll();
         for (City city : all) {
             final Forecast forecast = weatherService.getForecast(city.getName());
             city.setTemperature(forecast.getMain().getTemperature());
             city.setUpdateTime(forecast.getTime());
+            logger.debug("Update forecast for {}, t={}, time={}", city.getName(), city.getTemperature(), city.getUpdateTime());
             repository.save(city);
         }
     }

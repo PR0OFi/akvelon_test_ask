@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface CityService {
     void createCity(String name);
+
     void deleteCityById(int id);
+
     void updateWeatherById(int id);
+
     List<City> readCity();
+
     void autoUpdateWeather();
 }
