@@ -3,6 +3,7 @@ package com.vysotskyi.task.service;
 import com.vysotskyi.task.model.City;
 import com.vysotskyi.task.model.forecast.Forecast;
 import com.vysotskyi.task.repository.CityRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,10 +21,9 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void createCity() {
-        final Forecast forecast = weatherService.getForecast();
-        final City city = new City();
-        city.setName(forecast.getCityName());
+    public void createCity(String name) {
+        final City city = new City(name);
+        final Forecast forecast = weatherService.getForecast(city.getName());
         city.setTemperature(forecast.getMain().getTemperature());
         city.setUpdateTime(forecast.getTime());
         repository.save(city);
@@ -38,7 +38,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public void updateWeatherById(int id) {
         final City city = repository.getOne(id);
-        final Forecast forecast = weatherService.getForecast();
+        final Forecast forecast = weatherService.getForecast(city.getName());
         city.setTemperature(forecast.getMain().getTemperature());
         city.setUpdateTime(forecast.getTime());
         repository.save(city);
@@ -47,5 +47,18 @@ public class CityServiceImpl implements CityService {
     @Override
     public List<City> readCity() {
         return repository.findAll();
+    }
+
+    @Transactional
+    @Scheduled(fixedDelayString = "${delay.update.rate}")
+    @Override
+    public void autoUpdateWeather() {
+        final List<City> all = repository.findAll();
+        for (City city : all) {
+            final Forecast forecast = weatherService.getForecast(city.getName());
+            city.setTemperature(forecast.getMain().getTemperature());
+            city.setUpdateTime(forecast.getTime());
+            repository.save(city);
+        }
     }
 }

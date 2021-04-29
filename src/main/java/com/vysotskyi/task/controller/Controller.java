@@ -11,30 +11,35 @@ import java.util.List;
 public class Controller {
     private final CityService service;
 
-   @Autowired
+    @Autowired
     public Controller(CityService service) {
         this.service = service;
     }
 
 
-    @GetMapping(value = "/add")
-    public void addCity(){
-        service.createCity();
+    @GetMapping(value = "/city/{name}")
+    public void addCity(@PathVariable String name) {
+        service.createCity(name);
     }
 
-    @PostMapping(value = "/update", produces = "application/json")
-    public void updateWeather(@RequestBody Integer id) {
+    @GetMapping(value = "/update/{id}")
+    public void updateWeather(@PathVariable Integer id) {
         service.updateWeatherById(id);
     }
 
-    @PostMapping(value = "/deletebyid", produces = "application/json")
-    public void deleteById(@RequestBody Integer id){
-            service.deleteCityById(id);
+    @GetMapping(value = "/delete/{id}")
+    public void deleteById(@PathVariable Integer id) {
+        service.deleteCityById(id);
     }
 
     @GetMapping(value = "/getCities")
-    public List<City> getAll(){
+    public List<City> getAll() {
         return service.readCity();
+    }
+
+    @GetMapping(value = "/update/all")
+    public void updateAll(){
+        service.autoUpdateWeather();
     }
 
 }

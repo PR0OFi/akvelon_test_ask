@@ -1,4 +1,4 @@
-package com.vysotskyi.task.conf;
+package com.vysotskyi.task.config;
 
 
 
@@ -15,7 +15,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-public class HibernateConf {
+public class HibernateConfig {
 
     @Bean("entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory() {

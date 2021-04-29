@@ -24,6 +24,10 @@ public class City {
     public City() {
     }
 
+    public City(String nameCity) {
+        this.nameCity = nameCity;
+    }
+
     public void setName(String nameCity) {
         this.nameCity = nameCity;
     }

@@ -1,4 +1,4 @@
-package com.vysotskyi.task.conf;
+package com.vysotskyi.task.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
