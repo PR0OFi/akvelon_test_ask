@@ -18,7 +18,6 @@ public class Controller {
         this.service = service;
     }
 
-
     @GetMapping(value = "/city/{name}")
     public void addCity(@PathVariable String name) {
         service.createCity(name);
@@ -34,14 +33,8 @@ public class Controller {
         service.deleteCityById(id);
     }
 
-    @GetMapping(value = "/getCities")
+    @GetMapping(value = "/read/cities")
     public List<City> getAll() {
         return service.readCity();
     }
-
-    @GetMapping(value = "/update/all")
-    public void updateAll() {
-        service.autoUpdateWeather();
-    }
-
 }
